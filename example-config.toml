@@ -1,0 +1,14 @@
+username = "my-user"
+template = "my-org/my-repo"
+ignoredRepositories = [ "my-ignored-repo", "my-other-ignored-repo" ]
+
+[[labelRule]]
+  [labelRule.create]
+  name = "label1"
+  description = "a cool label"
+  color = "#000000"
+
+[[labelRule]]
+  [labelRule.override]
+  old = "old label name"
+  new = "new label name"

@@ -28,7 +28,8 @@ library
                        Prelude
 
   build-depends:       base-noprelude ^>= 4.12.0.0
-                     , relude
+                     , relude ^>= 0.5.0
+                     , tomland ^>= 1.1
 
   ghc-options:         -Wall
                        -Wincomplete-uni-patterns
