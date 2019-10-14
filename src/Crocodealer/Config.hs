@@ -14,7 +14,7 @@ import Crocodealer.Core.Label as Label
 
 newtype Repo = Repo
     { unRepo :: Text
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 -- | TOML Codec for a list of 'Repo'
 repoCodec :: Toml.Key -> TomlCodec [Repo]
@@ -25,7 +25,7 @@ data Config = Config
     , configRepository          :: !(Maybe Text)
     , configLabelRules          :: ![Label.LabelRule]
     , configIgnoredRepositories :: ![Repo]
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 -- | TOML Codec for the 'Config' data type.
 configCodec :: TomlCodec Config
@@ -36,5 +36,5 @@ configCodec = Config
     <*> repoCodec "ignoredRepositories" .= configIgnoredRepositories
 
 -- | Loads the @config.toml@ file.
-loadConfig :: MonadIO m => m Config
-loadConfig = Toml.decodeFile configCodec "config.toml"
+loadConfig :: MonadIO m => FilePath -> m Config
+loadConfig = Toml.decodeFile configCodec

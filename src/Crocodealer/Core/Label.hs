@@ -25,7 +25,7 @@ disum match ctor codec = Codec
 
 newtype Name a = Name
     { unName :: Text
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 -- | TOML Codec for the 'Name' data type.
 nameCodec :: Key -> TomlCodec (Name a)
@@ -34,7 +34,7 @@ nameCodec name = Toml.diwrap $ Toml.text name
 -- | TOML Codec for the 'HexColor' data type.
 newtype HexColor = HexColor
     { unHexColor :: Text
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 hexColorCodec :: TomlCodec HexColor
 hexColorCodec = Toml.dimap unHexColor HexColor $ Toml.text "color"
@@ -43,7 +43,7 @@ data Label = Label
     { labelName        :: !(Name Label)
     , labelDescription :: !Text
     , labelColor       :: !HexColor
-    } deriving (Show)
+    } deriving (Show, Eq)
 
 -- | TOML Codec for the 'Label' data type.
 labelCodec :: TomlCodec Label
@@ -58,7 +58,7 @@ data LabelRule
     | Override     -- | Override an existing label.
     !(Name Label)   -- | First parameter is the existing label to be overridden.
     !(Name Label)   -- | Second parameter is the new label value.
-    deriving (Show)
+    deriving (Show, Eq)
 
 -- | TOML Codec for overriding labels
 namesCodec :: TomlCodec (Name Label, Name Label)
