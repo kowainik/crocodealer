@@ -6,6 +6,6 @@ import Crocodealer.Config (loadConfig)
 import Test.Config (testConfig)
 
 main :: IO ()
-main = do 
+main = do
     config <- loadConfig "example-config.toml"
     hspec $ testConfig config
