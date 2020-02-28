@@ -23,3 +23,10 @@ What this tool should do: update all repositories in batches. Typical workflows 
    This helps with consistency.
 2. Propagate file updates.
 3. Run some checks over all repositories. For example, check whether they all have LICENSE, CONTRIBUTING, README files (etc.). 
+
+
+## Prerequisites
+
+To start using Crocodealer make sure that you have the following tools installed on your machine:
+
+* [`curl`](https://curl.haxx.se) – to download files.

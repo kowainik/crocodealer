@@ -2,11 +2,10 @@ module Crocodealer.Command.Sync
        ( sync
        ) where
 
-import Network.HTTP.Simple (getResponseBody, getResponseStatus, httpBS, parseRequest)
-import Network.HTTP.Types.Status (Status (..))
-
 import Crocodealer.ColorTerminal (errorMessage, infoMessage, warningMessage)
 import Crocodealer.Core.GitHub (FileName (..), RepoName (..), UserName (..))
+
+import Shellmet (($|), ($?))
 
 
 data FileStatus
@@ -27,16 +26,10 @@ sync userName templateRepoName fileName repos =
                         let fileDiff = calculateDiff f r
                         printFileDiff userName repo fileDiff
 
-fetchGitHubFile :: UserName -> RepoName -> FileName -> IO (Maybe ByteString)
+fetchGitHubFile :: UserName -> RepoName -> FileName -> IO (Maybe Text)
 fetchGitHubFile userName repoName fileName = do
     let url = "https://raw.githubusercontent.com/" <> unUserName userName <> "/" <> unRepoName repoName <> "/master/" <> unFileName fileName
-    req <- parseRequest $ toString url
-    resp <- httpBS req
-
-    pure $ case getResponseStatus resp of
-        Status 200 _ -> Just $ getResponseBody resp
-        _            -> Nothing
-
+    (Just <$> "curl" $| ["-s", "--fail", url]) $? pure Nothing
 
 printFileDiff :: UserName -> RepoName -> FileStatus -> IO ()
 printFileDiff (UserName user) (RepoName repo) = \case
@@ -50,7 +43,7 @@ printFileDiff (UserName user) (RepoName repo) = \case
     userRepo :: Text
     userRepo = user <> "/" <> repo <> ": "
 
-calculateDiff :: ByteString -> ByteString -> FileStatus
+calculateDiff :: Text -> Text -> FileStatus
 calculateDiff templateFile repoFile =
     if templateFile == repoFile
     then UpToDate
